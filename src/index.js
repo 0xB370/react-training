@@ -24,7 +24,19 @@ function Square(props){
     }
   
     render() {
+
+      const tableroSize = 3;
+      let cuadros = [];
+      for (let i=0; i<tableroSize; i++){
+        let fila = [];
+        for (let j=0; j<tableroSize; j++){
+          fila.push(this.renderSquare(i*tableroSize + j));
+        }
+        cuadros.push(<div key={i} className="board-row">{fila}</div>)
+      }
+
       return (
+        /*
         <div>
           <div className="board-row">
             {this.renderSquare(0)}
@@ -42,6 +54,10 @@ function Square(props){
             {this.renderSquare(8)}
           </div>
         </div>
+        */
+
+        <div>{cuadros}</div>
+        
       );
     }
   }
