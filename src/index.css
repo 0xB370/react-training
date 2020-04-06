@@ -49,3 +49,7 @@ body {
     margin-left: 20px;
   }
   
+  .move-list-item-seleccionado{
+    float: left;
+    font-weight: bold;
+  }
