@@ -14,7 +14,6 @@ function Square(props){
 }
   
   class Board extends React.Component {
-
     renderSquare(i) {
       const winLine = this.props.winLine;
       return (
@@ -26,9 +25,7 @@ function Square(props){
       />
       );
     }
-  
     render() {
-
       const tableroSize = 3;
       let cuadros = [];
       for (let i=0; i<tableroSize; i++){
@@ -38,7 +35,6 @@ function Square(props){
         }
         cuadros.push(<div key={i} className="board-row">{fila}</div>)
       }
-
       return (
         <div>{cuadros}</div>       
       );
@@ -46,7 +42,6 @@ function Square(props){
   }
   
   class Game extends React.Component {
-
     constructor(props){
       super(props);
       this.state = {
@@ -58,7 +53,6 @@ function Square(props){
         ascendente: true
       };
     }
-
     handleClick(i){
       const history = this.state.history.slice(0, this.state.stepNumber + 1);
       const current = history[history.length - 1];
@@ -76,26 +70,22 @@ function Square(props){
         xIsNext: !this.state.xIsNext,
       });
     }
-
     jumpTo(step){
       this.setState({
         stepNumber: step,
         xIsNext: (step % 2) === 0,
       })
     }
-
     manejarOrden(){
       this.setState({
         ascendente: !this.state.ascendente
       });
     }
-
     render() {
       const history = this.state.history;
       const current = history[this.state.stepNumber];
       const winnerInfo = calculateWinner(current.squares);
       const winner = winnerInfo.winner;
-
       let moves = history.map((step, move) => {
         const ultimoMov = step.ultimoMov;
         const columna = 1 + ultimoMov % 3;
@@ -120,9 +110,12 @@ function Square(props){
       if (winner){
         status = 'Winner: ' + winner;
       } else {
-        status = 'Next player: ' + (this.state.xIsNext ? 'X' : 'O');
+        if (winnerInfo.esEmpate){
+          status = 'Draw';
+        } else {
+          status = 'Next player: ' + (this.state.xIsNext ? 'X' : 'O');
+        }
       }
-
       return (
         <div className="game">
           <div className="game-board">
@@ -150,8 +143,6 @@ function Square(props){
     <Game />,
     document.getElementById('root')
   );
-  
-
 
   function calculateWinner(squares) {
     const lines = [
@@ -170,11 +161,20 @@ function Square(props){
         return {
           winner: squares[a],
           line: lines[i],
+          esEmpate: false,
         };
       }
     }
+    let esEmpate = true;
+    for(let i=0; i<squares.length; i++){
+      if(squares[i] === null){
+        esEmpate = false;
+        break;
+      }
+    }
     return {
-      winner: null
+      winner: null,
+      line: null,
+      esEmpate: esEmpate
     };
   }
-
